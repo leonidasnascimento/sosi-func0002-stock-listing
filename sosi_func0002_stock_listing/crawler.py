@@ -1,5 +1,5 @@
 from typing import List
-from models.stock import stock
+from sosi_func0002_stock_listing.models.stock import stock
 
 class stock_listing_crawler():
     def __init__(self):
