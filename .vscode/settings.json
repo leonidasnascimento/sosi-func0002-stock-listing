@@ -1,0 +1,8 @@
+{
+    "azureFunctions.deploySubpath": "sosi_func0002_stock_listing.zip",
+    "azureFunctions.pythonVenv": ".env",
+    "azureFunctions.projectLanguage": "Python",
+    "azureFunctions.projectRuntime": "~2",
+    "debug.internalConsoleOptions": "neverOpen",
+    "azureFunctions.preDeployTask": "func: pack"
+}
