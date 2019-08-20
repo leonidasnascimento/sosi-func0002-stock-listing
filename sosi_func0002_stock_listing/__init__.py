@@ -4,14 +4,14 @@ import azure.functions as func
 
 from typing import List
 from configuration_manager.reader import reader
-from crawler import stock_listing_crawler
+from sosi_func0002_stock_listing.crawler import stock_listing_crawler
 
 def main(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
     # Loading configurations
-    configObj = reader('', '')
+    # configObj = reader('', '')
     
     # Crawling
     crawlerObj = stock_listing_crawler()

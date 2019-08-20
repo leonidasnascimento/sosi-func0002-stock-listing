@@ -16,7 +16,6 @@ class stock():
                 company = Company name
                 detail = Extra details that may support the operation
         """
-
         self.code = code
         self.company = company
         self.detail = detail
