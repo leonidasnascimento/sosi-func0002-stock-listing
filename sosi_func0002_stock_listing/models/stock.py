@@ -7,9 +7,18 @@ class stock():
     company: str()
     detail: str()
 
-    def __init__(self):
-        self.code = ''
-        self.company = ''
-        self.detail = ''
+    def __init__(self, code, company, detail):
+        """
+            Class initializer
+
+            Args:
+                code = Stock Code
+                company = Company name
+                detail = Extra details that may support the operation
+        """
+
+        self.code = code
+        self.company = company
+        self.detail = detail
         pass
     pass
