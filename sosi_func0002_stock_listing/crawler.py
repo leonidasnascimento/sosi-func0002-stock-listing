@@ -1,4 +1,5 @@
 import urllib3
+import datetime
 
 from typing import List
 from sosi_func0002_stock_listing.models.stock import stock
@@ -11,8 +12,8 @@ class stock_listing_crawler():
     def __init__(self):
         pass
     
-    def getStockList(self) -> []:
-        returnObj = []
+    def getStockList(self) -> dict:
+        returnDict = dict()
 
         for index in self.companies_index:
             url = self.site_url.format(index)
@@ -20,7 +21,12 @@ class stock_listing_crawler():
             res = req.request('GET', url)
             soup = BeautifulSoup(res.data, 'html.parser')
             table_id_aux = str('id_{}').format(index)
-            stocks = soup.find('table', {'id': table_id_aux}).findAll('tr')
+            stock_table = soup.find('table', {'id': table_id_aux})
+            
+            if not (stock_table):
+                continue
+                
+            stocks = stock_table.findAll('tr')
 
             # If not empty or null
             if not (stocks): continue
@@ -31,12 +37,18 @@ class stock_listing_crawler():
             for s in stocks:
                 stockRow = s.findAll('td')
 
-                if not stockRow: continue
+                if not stockRow: 
+                    continue
 
-                stock_code = stockRow[0].text
-                company = stockRow[1].text 
-                returnObj.append(stock(stock_code, company, ''))
+                utc_timestamp = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).isoformat()
+                stock_code = stockRow[1].text
+                company = stockRow[0].text
+                details = ''
+
+                stockObj = stock(stock_code, company, details, utc_timestamp)
+
+                returnDict[stockObj.code] = stockObj.__dict__
             pass
 
-        return returnObj
+        return returnDict
     pass
