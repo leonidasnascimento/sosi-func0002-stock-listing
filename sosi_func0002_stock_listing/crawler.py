@@ -2,7 +2,7 @@ import urllib3
 import datetime
 
 from typing import List
-from sosi_func0002_stock_listing.models.stock import stock
+from .models.stock import stock
 from bs4 import BeautifulSoup
 
 class stock_listing_crawler():
