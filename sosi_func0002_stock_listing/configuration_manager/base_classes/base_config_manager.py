@@ -1,6 +1,6 @@
 import json
 from abc import ABC
-from configuration_manager.domain.config import config
+from ...configuration_manager.domain.config import config
 
 class base_config_manager(ABC):
     configuration: config = None
