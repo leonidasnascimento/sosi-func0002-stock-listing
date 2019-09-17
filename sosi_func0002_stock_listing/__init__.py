@@ -6,7 +6,7 @@ import requests
 
 from typing import List
 from .configuration_manager.reader import reader
-from sosi_func0002_stock_listing.crawler import stock_listing_crawler
+from .crawler import stock_listing_crawler
 from azure.storage.blob import (
     Blob,
     BlockBlobService,
