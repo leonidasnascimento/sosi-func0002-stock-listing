@@ -5,14 +5,13 @@ import json
 import requests
 
 from typing import List
-from configuration_manager.reader import reader
+from .configuration_manager.reader import reader
 from sosi_func0002_stock_listing.crawler import stock_listing_crawler
 from azure.storage.blob import (
     Blob,
     BlockBlobService,
     PublicAccess
 )
-
 
 def upload_blob(blob_name: str, data: str):
     configObj = reader('local.settings.json', 'Values')
