@@ -14,7 +14,7 @@ from azure.storage.blob import (
 )
 
 def upload_blob(blob_name: str, data: str):
-    configObj = reader('..\local.settings.json', 'Values')
+    configObj = reader('..\\local.settings.json', 'Values')
 
     # Saving output and logging the operation
     # Create the BlockBlockService that is used to call the Blob service for the storage account.
