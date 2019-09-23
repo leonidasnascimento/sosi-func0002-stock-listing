@@ -126,6 +126,5 @@ dmypy.json
 bin
 obj
 appsettings.json
-local.settings.json
 .python_packages
 sosi_func0002_stock_listing.zip
