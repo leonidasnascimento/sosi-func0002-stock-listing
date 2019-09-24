@@ -13,8 +13,10 @@ from azure.storage.blob import (
     PublicAccess
 )
 
+SETTINGS_FILE_PATH = "..\\..\\..\\local.settings.json"
+
 def upload_blob(blob_name: str, data: str):
-    configObj = reader('sosi_func0002_stock_listing\\local.settings.json', 'Values')
+    configObj = reader(SETTINGS_FILE_PATH, 'Values')
 
     # Saving output and logging the operation
     # Create the BlockBlockService that is used to call the Blob service for the storage account.
@@ -41,7 +43,7 @@ def main(mytimer: func.TimerRequest) -> None:
         tzinfo=datetime.timezone.utc).isoformat()
 
     try:
-        configObj = reader('sosi_func0002_stock_listing\\local.settings.json', 'Values')
+        configObj = reader(SETTINGS_FILE_PATH, 'Values')
 
         # Crawling
         crawlerObj = stock_listing_crawler()
