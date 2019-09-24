@@ -41,7 +41,7 @@ def main(mytimer: func.TimerRequest) -> None:
         tzinfo=datetime.timezone.utc).isoformat()
 
     try:
-        configObj = reader('local.settings.json', 'Values')
+        configObj = reader('sosi_func0002_stock_listing\\local.settings.json', 'Values')
 
         # Crawling
         crawlerObj = stock_listing_crawler()
