@@ -14,7 +14,7 @@ from azure.storage.blob import (
     PublicAccess
 )
 
-SETTINGS_FILE_PATH = os.getcwd() + "/local.settings.json"
+SETTINGS_FILE_PATH = os.path.realpath("local.settings.json")
 
 def upload_blob(blob_name: str, data: str):
     configObj = reader(SETTINGS_FILE_PATH, 'Values')
