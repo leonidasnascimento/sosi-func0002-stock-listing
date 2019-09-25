@@ -3,7 +3,7 @@ import logging
 import azure.functions as func
 import json
 import requests
-import os
+import pathlib
 
 from typing import List
 from .configuration_manager.reader import reader
@@ -14,7 +14,7 @@ from azure.storage.blob import (
     PublicAccess
 )
 
-SETTINGS_FILE_PATH = os.path.realpath("local.settings.json")
+SETTINGS_FILE_PATH = pathlib.Path(__file__).parent.parent.__str__() + "\\local.settings.json" #.parent._str + "/local.settings.json"
 
 def upload_blob(blob_name: str, data: str):
     configObj = reader(SETTINGS_FILE_PATH, 'Values')
