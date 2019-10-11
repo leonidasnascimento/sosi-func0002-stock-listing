@@ -52,6 +52,9 @@ class stock_listing_crawler():
                     continue
 
                 returnDict[stock_obj.code] = stock_obj.__dict__
+
+                #Remove this
+                return returnDict
             pass
 
         return returnDict
@@ -78,7 +81,7 @@ class stock_code_details_crawler():
             stock_ref.stock_name = div_1_det[0].text
             stock_ref.isin_code = div_1_det[4].text
             stock_ref.stock_type = self.__set_stock_type(div_1_det[3].text)
-            stock_ref.currency = div_2_det[len(div_2_det) - 1].text
+            stock_ref.currency = 'BRL' # div_2_det[len(div_2_det) - 1].text
 
             return True
 

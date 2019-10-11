@@ -2,7 +2,7 @@
   "scriptFile": "__init__.py",
   "bindings": [
     {
-      "name": "mytimer",
+      "name": "TimerJobSosiMs0002StockListing",
       "type": "timerTrigger",
       "direction": "in",
       "schedule": "0 * * * * *"
