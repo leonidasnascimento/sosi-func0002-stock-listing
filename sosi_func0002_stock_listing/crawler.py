@@ -52,9 +52,6 @@ class stock_listing_crawler():
                     continue
 
                 returnDict[stock_obj.code] = stock_obj.__dict__
-
-                #Remove this
-                return returnDict
             pass
 
         return returnDict
