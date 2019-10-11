@@ -38,7 +38,7 @@ def upload_blob(blob_name: str, data: str):
     block_blob_service.create_blob_from_text(container_name, blob_name, data)
     pass
 
-def main(mytimer: func.TimerRequest) -> None:
+def main(TimerJobSosiMs0002StockListing: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
