@@ -6,66 +6,52 @@ import requests
 import pathlib
 
 from typing import List
-from .configuration_manager.reader import reader
+from configuration_manager.reader import reader
 from .crawler import stock_listing_crawler
+from .models.stock import stock
 from azure.storage.blob import (
     Blob,
     BlockBlobService,
     PublicAccess
 )
 
-SETTINGS_FILE_PATH = pathlib.Path(__file__).parent.parent.__str__() + "//local.settings.json"
-
-def upload_blob(blob_name: str, data: str):
-    config_obj = reader(SETTINGS_FILE_PATH, 'Values')
-
-    # Saving output and logging the operation
-    # Create the BlockBlockService that is used to call the Blob service for the storage account.
-    block_blob_service = BlockBlobService(
-        account_name=config_obj.get_value('AzureBlobAccountName'),
-        account_key=config_obj.get_value('AzureBlobAccountKey')
-    )
-
-    # Create a container called 'quickstartblobs'.
-    container_name = config_obj.get_value('AzureContainerName')
-    block_blob_service.create_container(container_name, fail_on_exist=False)
-
-    # Set the permission so the blobs are public.
-    block_blob_service.set_container_acl(
-        container_name, public_access=PublicAccess.Container)
-
-    # Uploading list
-    block_blob_service.create_blob_from_text(container_name, blob_name, data)
-    pass
+SETTINGS_FILE_PATH = pathlib.Path(
+    __file__).parent.parent.__str__() + "//local.settings.json"
 
 def main(TimerJobSosiMs0002StockListing: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
     try:
-        config_obj = reader(SETTINGS_FILE_PATH, 'Values')
+        logging.info("'TimerJobSosiMs0002StockListing' has begun")
 
+        config_obj: reader = reader(SETTINGS_FILE_PATH, 'Values')
+        next_service_url: str = config_obj.get_value("NEXT_SERVICE_URL")
+        func_key_header: str = config_obj.get_value("X_FUNCTION_KEY")
+        
         # Crawling
-        crawler_obj = stock_listing_crawler()
-        stock_list = crawler_obj.get_stock_list()
+        logging.info("Getting stock list. It may take a while...")
+        stock_list: list = stock_listing_crawler().get_stock_list()
 
-        for s in stock_list:
-            jsonAux = json.dumps(stock_list.get(s))
+        if not stock_list or len(stock_list) == 0:
+            logging.warning("No stock code was found to process...")
+        else:
+            for s in stock_list:
+                obj: stock = s 
 
-            headers = {
-                'content-type': "application/json",
-                'cache-control': "no-cache",
-                'postman-token': "652ec406-7b16-40ca-8436-5baf1d36b793"
-            }
+                logging.info("Sending '{}' for next processing step...".format(obj.code))
+                jsonAux = json.dumps(obj.__dict__)
 
-            response: requests.Response = requests.request("POST", config_obj.get_value(
-                "StockListingServiceEndPoint"), data=jsonAux, headers=headers)
+                headers = {
+                    'content-type': "application/json",
+                    'x-functions-key': func_key_header,
+                    'cache-control': "no-cache"
+                }
 
-            blob_data = ('STATUS => ' + str(response.status_code) +
-                         '\nREASON => ' + str(response.reason) +
-                         '\nMESSAGE => ' + str(response.text) +
-                         '\n\n' + jsonAux)
-            upload_blob(s, blob_data)
+                # Ain't gonna wait for any response. At first, we will not care about this. Just going forward
+                requests.Response = requests.request("POST", next_service_url, data=jsonAux, headers=headers)
+        logging.info("Timer job is done. Waiting for the next execution time")
+
         pass
     except Exception as ex:
         error_log = '{} -> {}'
