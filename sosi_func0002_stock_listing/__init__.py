@@ -4,6 +4,7 @@ import azure.functions as func
 import json
 import requests
 import pathlib
+import threading
 
 from typing import List
 from configuration_manager.reader import reader
@@ -40,16 +41,11 @@ def main(TimerJobSosiMs0002StockListing: func.TimerRequest) -> None:
                 obj: stock = s 
 
                 logging.info("Sending '{}' for next processing step...".format(obj.code))
-                jsonAux = json.dumps(obj.__dict__)
-
-                headers = {
-                    'content-type': "application/json",
-                    'x-functions-key': func_key_header,
-                    'cache-control': "no-cache"
-                }
+                json_obj = json.dumps(obj.__dict__)
 
                 # Ain't gonna wait for any response. At first, we will not care about this. Just going forward
-                requests.Response = requests.request("POST", next_service_url, data=jsonAux, headers=headers)
+                threading.Thread(target=invoke_url, args=(next_service_url, json_obj, func_key_header)).start()
+        
         logging.info("Timer job is done. Waiting for the next execution time")
 
         pass
@@ -57,4 +53,14 @@ def main(TimerJobSosiMs0002StockListing: func.TimerRequest) -> None:
         error_log = '{} -> {}'
         logging.exception(error_log.format(utc_timestamp, str(ex)))
         pass
+    pass
+
+def invoke_url(url, json, func_key_header):
+    headers = {
+        'content-type': "application/json",
+        'x-functions-key': func_key_header,
+        'cache-control': "no-cache"
+    }
+
+    requests.request("POST", url, data=json, headers=headers)
     pass
